@@ -77,7 +77,7 @@ upper right group in which the number of pixels with a value of 199 is greater.
 </div>
 
 Noticeably, in the upper right group, the images exhibit a higher average pixel value, signifying greater brightness. 
-This corresponds to a larger number of pictures representing bacteria, which is in line with our expectations. 
+This corresponds to a larger number of images representing bacteria, which is in line with our expectations. 
 
 <div style="display: flex">
   <img src="images/image_mean_pic.png" alt="Image 3" style="margin-right: 10px;">
