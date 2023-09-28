@@ -1,6 +1,6 @@
 orgenize_images.py
 old_model/*
-__pycache__/*
+**/__pycache__/*
 .idea/*
 .DS_Store
 model/*
