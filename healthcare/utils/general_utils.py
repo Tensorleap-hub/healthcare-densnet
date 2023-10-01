@@ -12,6 +12,10 @@ def load_image(file_path) -> np.ndarray:
 
 
 def flat_image(img: np.ndarray) -> np.ndarray:
-    grayscale_image = np.dot(img[..., :3], [0.2989, 0.5870, 0.1140])
+    grayscale_image = np.dot(img[..., :3], CONFIG['scaling_factors'])
     flattened_image = grayscale_image.flatten().astype(int)
     return flattened_image
+
+
+def exception_factory(exception, message):
+    return exception(message)
