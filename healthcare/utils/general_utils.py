@@ -15,7 +15,3 @@ def flat_image(img: np.ndarray) -> np.ndarray:
     grayscale_image = np.dot(img[..., :3], CONFIG['scaling_factors'])
     flattened_image = grayscale_image.flatten().astype(int)
     return flattened_image
-
-
-def exception_factory(exception, message):
-    return exception(message)
