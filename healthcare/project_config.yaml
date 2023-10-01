@@ -3,6 +3,13 @@ LABELS:
   - bacteria
   - virus
 
+scaling_factors:
+  - 0.2989
+  - 0.5870
+  - 0.1140
+
 img_dims: 640
+
+K: 30
 
 local_path: "/Users/chenrothschild/tensorleap/data/chest_xray_color"

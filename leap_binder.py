@@ -4,7 +4,7 @@ from pathlib import Path
 
 from healthcare.config import CONFIG
 from healthcare.data.preprocess import load_images
-from healthcare.utils.general_utils import load_image, flat_image
+from healthcare.utils.general_utils import load_image, flat_image, exception_factory
 from healthcare.utils.visuelizers import pixels_histogram
 
 # Tensorleap imports
@@ -57,8 +57,10 @@ def metadata_gt_name(idx: int, preprocess: PreprocessResponse) -> str:
         return 'NORMAL'
     elif digit[1] == 1:
         return 'bacteria'
-    else:
+    elif digit[2] == 1:
         return 'virus'
+    else:
+        raise ValueError("Invalid label value")
 
 
 def metadata_count_black_pixels(idx: int, preprocess: PreprocessResponse) -> int:

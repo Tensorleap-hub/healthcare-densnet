@@ -11,8 +11,10 @@ def load_images(local_filepath) -> Tuple[List[Any], List[List[int]]]:
             label = [1, 0, 0]
         elif value == "bacteria":
             label = [0, 1, 0]
-        else:
+        elif value == "virus":
             label = [0, 0, 1]
+        else:
+            raise ValueError("Invalid value: " + value + ". Value should be bacteria /NORMAL /virus")
 
         for filename in os.listdir(local_filepath.joinpath(value)):
             if filename.endswith(".png") or filename.endswith(".jpg") or filename.endswith(".jpeg"):
