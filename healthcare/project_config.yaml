@@ -13,3 +13,6 @@ img_dims: 640
 K: 30
 
 local_path: "/Users/chenrothschild/tensorleap/data/chest_xray_color"
+cloud_file_path: 'Healthcare'
+BUCKET_NAME: 'example-datasets-47ml982d'
+PROJECT_ID: 'example-dev-project-nmrksf0o'
