@@ -1,24 +1,49 @@
 import os
 from typing import List, Tuple, Any
+from pathlib import Path
+
+from healthcare.config import CONFIG
+from healthcare.utils.gcs_utils import _connect_to_gcs_and_return_bucket
 
 
-def load_images(local_filepath) -> Tuple[List[Any], List[List[int]]]:
-    file_path_list = []
-    label_list = []
+def load_images(set) -> Tuple[List[Any], List[List[int]]]:
+    bucket = _connect_to_gcs_and_return_bucket(CONFIG['BUCKET_NAME'])
+    dataset_path = Path(CONFIG['cloud_file_path'])
+    image_list = []
+    labels_list = []
 
-    for value in ["bacteria", "NORMAL", "virus"]:
+    # for densnet:
+    for value in ["NORMAL", "bacteria", "virus"]:
         if value == "NORMAL":
             label = [1, 0, 0]
         elif value == "bacteria":
             label = [0, 1, 0]
-        elif value == "virus":
-            label = [0, 0, 1]
         else:
-            raise ValueError("Invalid value: " + value + ". Value should be bacteria /NORMAL /virus")
+            label = [0, 0, 1]
+        image_list_per_value = [obj.name for obj in bucket.list_blobs(prefix=str(dataset_path / set / value))]
+        image_list_per_value = image_list_per_value[1: len(image_list_per_value)]
+        labels_list_per_value = [label for _ in range(len(image_list_per_value))]
 
-        for filename in os.listdir(local_filepath.joinpath(value)):
-            if filename.endswith(".png") or filename.endswith(".jpg") or filename.endswith(".jpeg"):
-                file_path = (local_filepath.joinpath(value)).joinpath(filename)
-                file_path_list.append(file_path)
-                label_list.append(label)
-    return file_path_list, label_list
+        image_list = image_list + image_list_per_value
+        labels_list = labels_list + labels_list_per_value
+
+    # # for yolov8 and cnn:
+    # for value in ["NORMAL", "Pneumonia"]:
+    #     if value == "NORMAL":
+    #         label = [1, 0]
+    #         image_list_per_value = [obj.name for obj in bucket.list_blobs(prefix=str(dataset_path / set / value))]
+    #
+    #     else:
+    #         label = [0, 1]
+    #         image_list_per_value = [obj.name for obj in bucket.list_blobs(prefix=str(dataset_path / set / "bacteria"))]
+    #         image_list_per_value_1 = image_list_per_value[1: len(image_list_per_value)]
+    #         image_list_per_value = [obj.name for obj in bucket.list_blobs(prefix=str(dataset_path / set / "virus"))] \
+    #                                + image_list_per_value_1
+    #
+    #     image_list_per_value = image_list_per_value[1: len(image_list_per_value)]
+    #     labels_list_per_value = [label for _ in range(len(image_list_per_value))]
+    #
+    #     image_list = image_list + image_list_per_value
+    #     labels_list = labels_list + labels_list_per_value
+
+    return image_list, labels_list
