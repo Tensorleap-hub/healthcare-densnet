@@ -19,6 +19,7 @@ transformers = "^4.33.1"
 onnx = "^1.14.1"
 torch = "^2.0.1"
 torchvision = "^0.15.2"
+google-cloud-storage = "^2.13.0"
 
 
 [build-system]
