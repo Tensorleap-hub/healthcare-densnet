@@ -1,10 +1,13 @@
 from typing import List, Dict
 import numpy as np
 from pathlib import Path
-
+import tensorflow as tf
+from numpy import ndarray
+import cv2
 from healthcare.config import CONFIG
 from healthcare.data.preprocess import load_images
-from healthcare.utils.general_utils import load_image, flat_image, exception_factory
+from healthcare.utils.gcs_utils import _download
+from healthcare.utils.general_utils import load_image, flat_image
 from healthcare.utils.visuelizers import pixels_histogram
 
 # Tensorleap imports
@@ -14,13 +17,9 @@ from code_loader.contract.visualizer_classes import LeapHorizontalBar
 
 
 def preprocess_func() -> List[PreprocessResponse]:
-    local_filepath = Path(CONFIG['local_path'])
-    local_filepath_train = local_filepath.joinpath("train")
-    train_X, train_Y = load_images(local_filepath_train)
-    local_filepath_val = local_filepath.joinpath("val")
-    val_X, val_Y = load_images(local_filepath_val)
-    local_filepath_val = local_filepath.joinpath("test")
-    test_X, test_Y = load_images(local_filepath_val)
+    train_X, train_Y = load_images('train')
+    val_X, val_Y = load_images('val')
+    test_X, test_Y = load_images('test')
 
     train_length = len(train_X)
     val_length = len(val_X)
@@ -34,9 +33,16 @@ def preprocess_func() -> List[PreprocessResponse]:
 
 
 def input_encoder(idx: int, preprocess: PreprocessResponse) -> np.ndarray:
-    file_path = preprocess.data['images'][idx]
-    img = load_image(file_path)
+    cloud_path = preprocess.data['images'][idx]
+    fpath = _download(str(cloud_path))
+    img = load_image(fpath)
     img = img / 255
+
+    # #if CNN:
+    # grayscale_image = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    # grayscale_image_3d = grayscale_image[:, :, np.newaxis]
+    # img = grayscale_image_3d / 255
+
     return img.astype('float32')
 
 
@@ -53,6 +59,7 @@ def metadata_gt_label(idx: int, preprocess: PreprocessResponse) -> int:
 
 def metadata_gt_name(idx: int, preprocess: PreprocessResponse) -> str:
     digit = gt_encoder(idx, preprocess)
+    #for densnet:
     if digit[0] == 1:
         return 'NORMAL'
     elif digit[1] == 1:
@@ -62,10 +69,19 @@ def metadata_gt_name(idx: int, preprocess: PreprocessResponse) -> str:
     else:
         raise ValueError("Invalid label value")
 
+    # #if CNN or Yolo:
+    # if digit[0] == 1:
+    #     return 'NORMAL'
+    # elif digit[1] == 1:
+    #     return 'Pneumonia'
+    # else:
+    #     raise ValueError("Invalid label value")
 
-def metadata_count_black_pixels(idx: int, preprocess: PreprocessResponse) -> int:
-    file_path = preprocess.data['images'][idx]
-    img = load_image(file_path)
+
+def metadata_count_black_pixels(idx: int, preprocess: PreprocessResponse) -> ndarray:
+    cloud_path = preprocess.data['images'][idx]
+    fpath = _download(str(cloud_path))
+    img = load_image(fpath)
     flattened_image = flat_image(img)
     black_pixel_count = np.sum(flattened_image == [0], axis=-1)
 
@@ -73,16 +89,15 @@ def metadata_count_black_pixels(idx: int, preprocess: PreprocessResponse) -> int
 
 
 def metadata_pixels_count(idx: int, preprocess: PreprocessResponse) -> Dict:
-    file_path = preprocess.data['images'][idx]
-    img = load_image(file_path)
+    cloud_path = preprocess.data['images'][idx]
+    fpath = _download(str(cloud_path))
+    img = load_image(fpath)
     flattened_image = flat_image(img)
-    pixel_counts = {}
+    pixel_counts = {key: 0 for key in range(256)}
+
     for pixel_value in flattened_image:
         pixel_value_int = int(pixel_value)
-        if pixel_value_int in pixel_counts:
-            pixel_counts[pixel_value_int] += 1
-        else:
-            pixel_counts[pixel_value_int] = 1
+        pixel_counts[pixel_value_int] += 1
 
     return pixel_counts
 
