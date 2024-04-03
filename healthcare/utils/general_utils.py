@@ -6,7 +6,7 @@ from healthcare.config import CONFIG
 
 
 def load_image(file_path) -> np.ndarray:
-    img = plt.imread(file_path)
+    img = cv2.imread(file_path)
     img = cv2.resize(img, (CONFIG['img_dims'], CONFIG['img_dims']))
     return img
 
