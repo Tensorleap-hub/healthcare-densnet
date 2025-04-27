@@ -1,0 +1,168 @@
+decorators:
+  - operation: Input
+    data:
+      type: Input
+      output_name: image
+    id: '20'
+    inputs: {}
+    outputs:
+      image:
+        - inputKey: input
+          operation: Conv2D
+          name: conv2d
+          id: '19'
+        - inputKey: data
+          operation: Visualizer
+          id: '21'
+        - inputKey: image
+          operation: Visualizer
+          id: '22'
+  - operation: Visualizer
+    data:
+      type: Visualizer
+      name: Image
+      visualizer_name: Image
+      visualizer_type: Image
+      arg_names:
+        - data
+      user_unique_name: Image
+    id: '21'
+    inputs:
+      data:
+        - outputKey: image
+          operation: Input
+          id: '20'
+    outputs: {}
+  - operation: Visualizer
+    data:
+      type: Visualizer
+      name: pixels_histogram
+      visualizer_name: pixels_histogram
+      visualizer_type: HorizontalBar
+      arg_names:
+        - image
+      user_unique_name: pixels_histogram
+    id: '22'
+    inputs:
+      image:
+        - outputKey: image
+          operation: Input
+          id: '20'
+    outputs: {}
+  - operation: CategoricalCrossentropy
+    data:
+      type: Loss
+    id: '23'
+    inputs:
+      prediction:
+        - outputKey: feature_map
+          operation: Dense
+          name: dense_1
+          id: '1'
+      ground_truth:
+        - outputKey: classes
+          operation: GroundTruth
+          id: '24'
+    outputs: {}
+  - operation: GroundTruth
+    data:
+      type: GroundTruth
+      output_name: classes
+      selected: classes
+    id: '24'
+    inputs: {}
+    outputs:
+      classes:
+        - inputKey: ground_truth
+          operation: CategoricalCrossentropy
+          id: '23'
+        - inputKey: ground_truth
+          operation: Metric
+          id: '25'
+        - inputKey: ground_truth
+          operation: Metric
+          id: '26'
+        - inputKey: data
+          operation: Visualizer
+          id: '27'
+  - operation: Metric
+    data:
+      type: Metric
+      name: Accuracy
+      metric_name: Accuracy
+      arg_names:
+        - ground_truth
+        - prediction
+      user_unique_name: Accuracy
+    id: '25'
+    inputs:
+      prediction:
+        - outputKey: feature_map
+          operation: Dense
+          name: dense_1
+          id: '1'
+      ground_truth:
+        - outputKey: classes
+          operation: GroundTruth
+          id: '24'
+    outputs: {}
+  - operation: Metric
+    data:
+      type: Metric
+      name: ConfusionMatrixClassification
+      metric_name: ConfusionMatrixClassification
+      arg_names:
+        - ground_truth
+        - prediction
+      user_unique_name: ConfusionMatrixClassification
+    id: '26'
+    inputs:
+      prediction:
+        - outputKey: feature_map
+          operation: Dense
+          name: dense_1
+          id: '1'
+      ground_truth:
+        - outputKey: classes
+          operation: GroundTruth
+          id: '24'
+    outputs: {}
+  - operation: Visualizer
+    data:
+      type: Visualizer
+      name: bar_names_visualizer
+      visualizer_name: bar_names_visualizer
+      visualizer_type: HorizontalBar
+      arg_names:
+        - data
+      user_unique_name: GT_bar_names_visualizer
+    id: '27'
+    inputs:
+      data:
+        - outputKey: classes
+          operation: GroundTruth
+          id: '24'
+    outputs: {}
+  - operation: Visualizer
+    data:
+      type: Visualizer
+      name: bar_names_visualizer
+      visualizer_name: bar_names_visualizer
+      visualizer_type: HorizontalBar
+      arg_names:
+        - data
+      user_unique_name: Pred_bar_names_visualizer
+    id: '28'
+    inputs:
+      data:
+        - outputKey: feature_map
+          operation: Dense
+          name: dense_1
+          id: '1'
+    outputs: {}
+layers:
+  - operation: Dense
+    data:
+      prediction_type: classes
+    name: dense_1
+    id: '1'
