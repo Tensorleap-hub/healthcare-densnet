@@ -1,7 +1,11 @@
-LABELS:
+LABELS_DenseNet201:
   - NORMAL
   - bacteria
   - virus
+
+LABELS:
+  - NORMAL
+  - Pneumonia
 
 scaling_factors:
   - 0.2989
@@ -16,3 +20,8 @@ local_path: "/Users/chenrothschild/tensorleap/data/chest_xray_color"
 cloud_file_path: 'Healthcare'
 BUCKET_NAME: 'example-datasets-47ml982d'
 PROJECT_ID: 'example-dev-project-nmrksf0o'
+
+model:
+  - yolov8
+  - DenseNet201
+  - cnn
