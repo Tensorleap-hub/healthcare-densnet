@@ -1,5 +1,5 @@
-codeIntegrationId: 660d1f2b25b206881020b2b4
-projectId: 660d1e8525b206881020b2ae
+codeIntegrationId: 6873935c464b88554b9ebb03
+projectId: 68739353464b88554b9ebafd
 secretId: ""
 entryFile: leap_binder.py
 include:
@@ -7,9 +7,11 @@ include:
     - leap_test.py
     - leap_custom_test.py
     - leap_mapping.yaml
+    - requirements.txt
     - healthcare/data/preprocess.py
     - healthcare/utils/general_utils.py
     - healthcare/utils/visuelizers.py
     - healthcare/utils/gcs_utils.py
     - healthcare/config.py
     - healthcare/project_config.yaml
+pythonVersion: py38
