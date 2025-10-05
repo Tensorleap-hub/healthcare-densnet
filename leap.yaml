@@ -1,12 +1,12 @@
-codeIntegrationId: 6873935c464b88554b9ebb03
-projectId: 68739353464b88554b9ebafd
+codeIntegrationId: 68e2130b136dfe18d400f57f
+projectId: 68e21304136dfe18d400f579
 secretId: ""
-entryFile: leap_binder.py
+entryFile: leap_integration.py
 include:
+    - leap_integration.py
     - leap_binder.py
     - leap_test.py
     - leap_custom_test.py
-    - leap_mapping.yaml
     - requirements.txt
     - healthcare/data/preprocess.py
     - healthcare/utils/general_utils.py
