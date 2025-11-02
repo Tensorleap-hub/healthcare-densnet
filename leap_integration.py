@@ -25,7 +25,7 @@ def load_model():
 
 
 
-@integration_test()
+@tensorleap_integration_test()
 def check_custom_integration(idx, preprocess_response: PreprocessResponse):
     print("Starting custom tests")
     model = load_model()
