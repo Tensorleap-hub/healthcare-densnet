@@ -9,7 +9,7 @@ else:
     labels = CONFIG['LABELS']
 
 
-prediction_type1 = PredictionTypeHandler('classes', labels)
+prediction_type1 = PredictionTypeHandler('classes', labels,channel_dim=-1)
 
 
 

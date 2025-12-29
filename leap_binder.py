@@ -25,9 +25,9 @@ def preprocess_func() -> List[PreprocessResponse]:
     val_length = len(val_X)
     test_length = len(test_X)
 
-    train = PreprocessResponse(length=train_length, data={'images': train_X, 'labels': train_Y})
-    val = PreprocessResponse(length=val_length, data={'images': val_X, 'labels': val_Y})
-    test = PreprocessResponse(length=test_length, data={'images': test_X, 'labels': test_Y})
+    train = PreprocessResponse(length=train_length, data={'images': train_X, 'labels': train_Y},state=DataStateType.training)
+    val = PreprocessResponse(length=val_length, data={'images': val_X, 'labels': val_Y},state=DataStateType.validation)
+    test = PreprocessResponse(length=test_length, data={'images': test_X, 'labels': test_Y},state=DataStateType.test)
     response = [train, val, test]
     return response
 
@@ -40,7 +40,7 @@ def input_encoder_cnn(idx: int, preprocess: PreprocessResponse) -> np.ndarray:
     img = grayscale_image_3d / 255
     return img.astype('float32')
 
-@tensorleap_input_encoder('image')
+@tensorleap_input_encoder('image',channel_dim=-1)
 def input_encoder(idx: int, preprocess: PreprocessResponse) -> np.ndarray:
     if model_name == 'cnn':
         return input_encoder_cnn(idx, preprocess)
