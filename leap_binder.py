@@ -41,7 +41,7 @@ def input_encoder_cnn(idx: int, preprocess: PreprocessResponse) -> np.ndarray:
     img = grayscale_image_3d / 255
     return img.astype('float32')
 
-@tensorleap_input_encoder('image', channel_dim = -1)
+@tensorleap_input_encoder('image', channel_dim=-1)
 def input_encoder(idx: int, preprocess: PreprocessResponse) -> np.ndarray:
     if model_name == 'cnn':
         return input_encoder_cnn(idx, preprocess)
